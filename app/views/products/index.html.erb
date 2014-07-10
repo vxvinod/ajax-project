@@ -1,3 +1,10 @@
+<% if !flash[:success].blank? %>
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= flash[:success] %>
+    </div> 
+<% end %>
+
 <div class="main-div">
 
   <h1>Listing products</h1>
@@ -16,7 +23,7 @@
       <td><%= product.name %></td>
       <td><%= product.password %></td>
       <td><%= link_to 'Show', product %></td>
-      <td><%= link_to 'Edit', edit_product_path(product) %></td>
+      <td><%= link_to 'Edit', edit_product_path(product), :id => "edit-#{product.id}",:class=>"edit" %></td>
       <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
     </tr>
   <% end %>
@@ -61,30 +68,85 @@
     $(".close,#close-button").on("click",modalClose);
   });
 
+
+
   
   $(".btn-primary").on("click",function(e){
     e.preventDefault();
     var  save_button = $(".btn-primary");
+    var uname = $("#username");
+    var pwd = $("#password");
     save_button.innerHTML = "Updating ..";
     $.ajax({
-      url: 'products/create',
-      type: 'post',
-      async: true,
-      data: { name:username.value, password:password.value },
-      success : function(result){
-        save_button.innerHTML = "Success";
-        //alert(result);
-        $(".modal-box").hide();
-        $("body").removeClass("dim");
-        $("body").html(result);
-      },
-      error : function(err){
-        save_button.innerHTML = "Try Again"
-        alert(err);
-      }  
+        url: 'products/create',
+        type: 'post',
+        async: true,
+        data: { name:username.value, password:password.value },
+        beforeSend : function(){
+          var value = (uname.val()== ""||pwd.val()=="") ? false : true;
+          if(value == "false"){
+          $("<div class='alert alert-error'>"+
+        "<button type='button' class='close' data-dismiss='alert'>&times;</button>"+"please enter username or password"+
+        "</div> ").insertAfter(".modal-header");
+        }
+          return value;
+          },
+         //alert("hello");
+        success : function(result){
+          save_button.innerHTML = "Success";
+          //alert(result);
+          $(".modal-box").hide();
+          $("body").removeClass("dim");
+          $("body").html(result);
+        },
+        error : function(err){
+          save_button.innerHTML = "Try Again";
+          $(".modal-box").hide();
+          $("body").removeClass("dim");
+          $("body").html(result);
+        },
+        complete : function(err){
+          $(".alert alert-block").addClass()
+        },  
+      });
+  });
+
+  var notificationTest = new Notify('header',{
+    body: 'This is an awesome notification',
+    notifyShow: onNotifyShow
+  });
+  
+
+  function webNotifyShow(){
+    if (Notify.isSupported()){
+     if (Notify.needsPermission())
+        Notify.requestPermission();
+    }
+  }
+
+  //webNotifyShow();
+
+  notificationTest.show();
+  //alert("sdfsdfs");
+
+  function onNotifyShow(){
+    console.log("Notification shown");
+  };
+
+
+  $(".edit").on("click",function(){
+    //alert("hello");
+    var $this = $(this);
+    var value = $this.attr("href").split('/');
+    value = value[2];
+    username = <%= fetch_value %>
+    alert(username);
+    console.log(value[2]);
+    alert(value[2]);
     });
-  }); 
+
 })();
+  
 </script>
 
 <style>
@@ -100,5 +162,8 @@
 }
 .bright{
   background-color: white;
+}
+.alert{
+  width:92%;
 }
 </style>

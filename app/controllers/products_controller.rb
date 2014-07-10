@@ -47,9 +47,11 @@ class ProductsController < ApplicationController
       #if @product.save
       if Product.create(:name => @name, :password => @password )
         #format.html { redirect_to @product, notice: 'Product was successfully created.' }
+        flash[:success] = "Values has been successfully added"
         redirect_to :action => "index"
        # format.json { render json: @product, status: :created, location: @product }
       else
+        flash[:notice] = "values has not been added successfully"
         format.html { render action: "new" }
      #   format.json { render json: @product.errors, status: :unprocessable_entity }
       end
@@ -83,4 +85,6 @@ class ProductsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  
 end

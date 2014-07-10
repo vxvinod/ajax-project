@@ -2,6 +2,7 @@ ModalTest::Application.routes.draw do
   resources :products
 
   match "products/create", :to => "products#create"
+  match "products/edit", :to => "products#edit"
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
