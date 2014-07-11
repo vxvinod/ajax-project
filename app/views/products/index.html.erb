@@ -43,9 +43,9 @@
     </div>
     <div class="modal-body">
       <label>username:</label>
-      <input type="text" id="username" value="name"></input><br>
+      <input type="text" id="username" value=""></input><br>
       <label>password:</label>
-      <input type="text" id="password" value="pass"></input><br>
+      <input type="text" id="password" value=""></input><br>
     </div>
     <div class="modal-footer">
       <a href="#" class="btn" id="close-button">Close</a>
@@ -134,15 +134,22 @@
   };
 
 
-  $(".edit").on("click",function(){
-    //alert("hello");
+  $(".edit").on("click",function(e){
+    e.preventDefault();
+    alert("hello");
     var $this = $(this);
     var value = $this.attr("href").split('/');
+    console.log(value);
     value = value[2];
-    username = <%= fetch_value %>
+
+    var username = <%= fetch_value %>;
     alert(username);
     console.log(value[2]);
     alert(value[2]);
+    $("#username").val(username);
+    $("body").addClass("dim");
+    $(".modal-box").show().addClass("bright");
+
     });
 
 })();
